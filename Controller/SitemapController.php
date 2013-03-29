@@ -13,11 +13,13 @@ namespace Berriart\Bundle\SitemapBundle\Controller;
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Berriart\Bundle\SitemapBundle\Manager\Sitemap;
 
-class SitemapController
+class SitemapController extends ContainerAware
 { 
     private $sitemap;
     private $request;
@@ -48,8 +50,12 @@ class SitemapController
     
     public function sitemapIndex()
     {
+        $urlPattern =  $this->container->getParameter('berriart_sitemap.config.gzip_url') .
+            $this->container->getParameter('berriart_sitemap.config.gzip_file_pattern');
         return $this->templating->renderResponse('BerriartSitemapBundle:Sitemap:sitemapindex.xml.twig', array(
             'pages' => $this->sitemap->pages(),
+            'gzip' => $this->container->getParameter('berriart_sitemap.config.gzip'),
+            'url' => $urlPattern
         ));
     }
 }

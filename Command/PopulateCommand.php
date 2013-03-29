@@ -14,9 +14,9 @@ namespace Berriart\Bundle\SitemapBundle\Command;
  */
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Avalanche\Bundle\SitemapBundle\Sitemap\Provider;
 
 class PopulateCommand extends ContainerAwareCommand
 {
@@ -32,6 +32,44 @@ class PopulateCommand extends ContainerAwareCommand
 
         $this->getContainer()->get('berriart_sitemap.provider.chain')->populate($sitemap);
 
+        $gzip = $this->getContainer()->getParameter('berriart_sitemap.config.gzip');
+        if ($gzip === true)
+        {
+            $directory = $this->getContainer()->getParameter('berriart_sitemap.config.gzip_dir');
+            $filename = $this->getContainer()->getParameter('berriart_sitemap.config.gzip_file_pattern');
+
+            if (!isset($directory) || trim($directory) === '')
+            {
+                $directory = './';
+            }
+
+            if (!isset($filename) || trim($filename) === '')
+            {
+                $output->writeln(sprintf('<comment>%s</comment>', 'Please specify gzip file pattern to use.'));
+                return;
+            }
+
+            $this->createGzip($sitemap, $directory, $filename);
+            $output->write('<info>Created gzip files!</info>', true);
+        }
+
         $output->write('<info>Sitemap was sucessfully populated!</info>', true);
+    }
+
+    private function createGzip($sitemap, $directory, $filename)
+    {
+        $templating = $this->getContainer()->get('templating');
+        $pages = $sitemap->pages();
+
+        for ($page = 1; $page <= $pages; $page++)
+        {
+            $sitemap->setPage($page);
+            $data = $templating->render('BerriartSitemapBundle:Sitemap:sitemap.xml.twig',
+                array('sitemap' => $sitemap));
+
+            $gzdata = gzencode($data, 9);
+            $fp = fopen($directory . sprintf($filename, $page), "w");
+            fwrite($fp, $gzdata);
+        }
     }
 }
