@@ -115,22 +115,12 @@ adding the alias configuration.
 The default number of urls (locs) per sitemap page is 50000, you can change it from
 the bundle configuration too.
 
-Creation of gzipped sitemap files is off by default. To enable, change the gzip
-configuration to true.
-gzip_dir configuration is the target directory where the generated gzipped sitemap files are stored.
-gzip_file_pattern is the pattern to use as filename for the gzipped sitemap files.
-gzip_url is the url where the gzipped sitemap files can be accessed from. If it is a relative url, the base_url is used as base.
-
 ``` yaml
 # app/config/config.yml
 berriart_sitemap:
     base_url: http://example.org 
     alias: your_own_sitemap_alias
     url_limit: 50000
-    gzip: true
-    gzip_dir: /mydirectory/
-    gzip_url: http://example.org/mysitemap/
-    gzip_file_pattern: sitemap.%d.xml.gz
 ```
 
 **Note:**
@@ -191,6 +181,7 @@ The following documents are available:
 
 - [Adding/Editing/Removing urls from sitemap](manage_sitemap.md)
 - [Populating the sitemap with existing urls](populating_sitemap.md)
+- [Dumping sitemap files](dumping_sitemap.md)
 
 ## Future features
 
