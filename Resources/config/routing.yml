@@ -1,9 +1,25 @@
 berriart_sitemap:
     pattern: /sitemap.xml
-    defaults: { _controller: berriart_sitemap.controller:sitemap, _format: xml }
-    requirements: 
+    defaults: { _controller: berriart_sitemap.controller:sitemap, _format: xml, page: 1 }
+    requirements:
         _method: GET
         _format: xml
+
+berriart_sitemap_paginated:
+    pattern: /sitemap.{page}.xml
+    defaults: { _controller: berriart_sitemap.controller:sitemap, _format: xml, page: 1 }
+    requirements:
+        _method: GET
+        _format: xml
+        page: \d+
+
+berriart_sitemap_paginated_gz:
+    pattern: /sitemap.{page}.xml.gz
+    defaults: { _controller: berriart_sitemap.controller:sitemapGzip, _format: gz, page: 1 }
+    requirements:
+        _method: GET
+        _format: gz
+        page: \d+
 
 berriart_sitemap_index:
     pattern: /sitemapindex.xml

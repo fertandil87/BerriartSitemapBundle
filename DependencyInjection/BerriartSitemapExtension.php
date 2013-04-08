@@ -39,6 +39,7 @@ class BerriartSitemapExtension extends Extension
         $container->setParameter('berriart_sitemap.config.base_url', $config['base_url']);
         $container->setParameter('berriart_sitemap.config.alias', $config['alias']);
         $container->setParameter('berriart_sitemap.config.url_limit', $config['url_limit']);
+        $container->setParameter('berriart_sitemap.config.gzip', array_key_exists('gzip', $config) ? $config['gzip'] : false);
         $container->setParameter('berriart_sitemap.config.dump_gzip', array_key_exists('dump_gzip', $config) ? $config['dump_gzip'] : false);
         $container->setParameter('berriart_sitemap.config.dump_dir', array_key_exists('dump_dir', $config) ? $config['dump_dir'] : './');
         $container->setParameter('berriart_sitemap.config.dump_index', array_key_exists('dump_index', $config) ? $config['dump_index'] : '');

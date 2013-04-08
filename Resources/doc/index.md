@@ -115,12 +115,16 @@ adding the alias configuration.
 The default number of urls (locs) per sitemap page is 50000, you can change it from
 the bundle configuration too.
 
+The gzip configuration is false by default. If the value is set to true, calling the index will display
+the gz version of the files.
+
 ``` yaml
 # app/config/config.yml
 berriart_sitemap:
     base_url: http://example.org 
     alias: your_own_sitemap_alias
     url_limit: 50000
+    gzip: true
 ```
 
 **Note:**

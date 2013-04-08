@@ -20,11 +20,6 @@ use Berriart\Bundle\SitemapBundle\Manager\Sitemap;
 
 class DumpCommand extends ContainerAwareCommand
 {
-    /**
-     * Holds Filesystem instance
-     *
-     * @var Symfony\Bundle\FrameworkBundle\Util\Filesystem
-     */
     private $filesystem;
 
     protected function configure()
@@ -76,7 +71,8 @@ class DumpCommand extends ContainerAwareCommand
             'pages' => $pages,
             'dump' => true,
             'url' => $urlPattern,
-            'lastmod' => new \DateTime()));
+            'lastmod' => new \DateTime()
+        ));
 
         file_put_contents($directory . $indexFile, $data);
     }
