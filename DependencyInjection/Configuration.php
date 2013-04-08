@@ -37,9 +37,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('alias')->defaultValue('sitemap')->end()
                 ->scalarNode('url_limit')->defaultValue(50000)->end()
                 ->scalarNode('gzip')->defaultValue(false)->end()
-                ->scalarNode('gzip_dir')->end()
-                ->scalarNode('gzip_file_pattern')->end()
-                ->scalarNode('gzip_url')->end()
+                ->scalarNode('dump_gzip')->defaultValue(false)->end()
+                ->scalarNode('dump_dir')->end()
+                ->scalarNode('dump_index')->defaultValue('sitemap.index.xml')->end()
+                ->scalarNode('dump_file_pattern')->defaultValue('sitemap.%d.xml')->end()
+                ->scalarNode('dump_url')->end()
             ->end()
         ;
 

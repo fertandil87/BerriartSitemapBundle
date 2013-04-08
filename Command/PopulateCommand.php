@@ -41,62 +41,6 @@ class PopulateCommand extends ContainerAwareCommand
 
         $this->getContainer()->get('berriart_sitemap.provider.chain')->populate($sitemap);
 
-        $gzip = $this->getContainer()->getParameter('berriart_sitemap.config.gzip');
-        if ($gzip === true)
-        {
-            $directory = $this->getContainer()->getParameter('berriart_sitemap.config.gzip_dir');
-            $filename = $this->getContainer()->getParameter('berriart_sitemap.config.gzip_file_pattern');
-
-            if (!isset($directory) || trim($directory) === '')
-            {
-                $directory = './';
-            }
-
-            if (!isset($filename) || trim($filename) === '')
-            {
-                $output->writeln(sprintf('<comment>%s</comment>', 'Please specify gzip file pattern to use.'));
-                return;
-            }
-
-            $this->createGzip($sitemap, $directory, $filename);
-            $output->write('<info>Created gzip files!</info>', true);
-        }
-
         $output->write('<info>Sitemap was sucessfully populated!</info>', true);
-    }
-
-    private function createGzip($sitemap, $directory, $filename)
-    {
-        $templating = $this->getContainer()->get('templating');
-        $pages = $sitemap->pages();
-
-        for ($page = 1; $page <= $pages; $page++)
-        {
-            $sitemap->setPage($page);
-            $data = $templating->render('BerriartSitemapBundle:Sitemap:sitemap.xml.twig',
-                array('sitemap' => $sitemap));
-
-            $gzdata = gzencode($data, 9);
-            $fp = fopen($directory . sprintf($filename, $page), "w");
-            fwrite($fp, $gzdata);
-        }
-    }
-
-    private function clearSitemap()
-    {
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $platform = $em->getConnection()->getDatabasePlatform();
-        $tables = array(
-                $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.url.class'))->getTableName(),
-                $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.image_url.class'))->getTableName()
-        );
-
-        $em->getConnection()->executeUpdate("SET foreign_key_checks = 0;");
-
-        foreach ($tables as $table) {
-            $em->getConnection()->executeUpdate($platform->getTruncateTableSQL($table, true));
-        }
-
-        $em->getConnection()->executeUpdate("SET foreign_key_checks = 1;");
     }
 }
