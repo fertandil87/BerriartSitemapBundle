@@ -43,4 +43,22 @@ class PopulateCommand extends ContainerAwareCommand
 
         $output->write('<info>Sitemap was sucessfully populated!</info>', true);
     }
+
+    private function clearSitemap()
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $platform = $em->getConnection()->getDatabasePlatform();
+        $tables = array(
+            $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.url.class'))->getTableName(),
+            $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.image_url.class'))->getTableName()
+        );
+
+        $em->getConnection()->executeUpdate("SET foreign_key_checks = 0;");
+
+        foreach ($tables as $table) {
+            $em->getConnection()->executeUpdate($platform->getTruncateTableSQL($table, true));
+        }
+
+        $em->getConnection()->executeUpdate("SET foreign_key_checks = 1;");
+    }
 }
