@@ -14,8 +14,8 @@ namespace Berriart\Bundle\SitemapBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Bundle\FrameworkBundle\Util\Filesystem;
 use Berriart\Bundle\SitemapBundle\Manager\Sitemap;
 
 class DumpCommand extends ContainerAwareCommand
@@ -32,8 +32,6 @@ class DumpCommand extends ContainerAwareCommand
     {
         $output->write('<info>Dumping Sitemap...</info>', true);
 
-        $this->filesystem = $this->getContainer()->get('filesystem');
-
         $gzip = $this->getContainer()->getParameter('berriart_sitemap.config.dump_gzip');
         $directory = $this->getContainer()->getParameter('berriart_sitemap.config.dump_dir');
         $indexFile = $this->getContainer()->getParameter('berriart_sitemap.config.dump_index');
@@ -48,7 +46,17 @@ class DumpCommand extends ContainerAwareCommand
         $output->write('<info>Sitemap was successfully dumped!</info>', true);
     }
 
-    private function writeSitemapFiles(Sitemap $sitemap, $directory, $indexFile, $filename, $gzip) {
+    protected function getFileSystem()
+    {
+        if (!isset($this->filesystem)) {
+            $this->filesystem = new FileSystem();
+        }
+
+        return $this->filesystem;
+    }
+
+    protected function writeSitemapFiles(Sitemap $sitemap, $directory, $indexFile, $filename, $gzip)
+    {
         $templating = $this->getContainer()->get('templating');
         $pages = $sitemap->pages();
 
@@ -80,13 +88,13 @@ class DumpCommand extends ContainerAwareCommand
     protected function createTempDir()
     {
         $tempDir = sys_get_temp_dir() . '/BerriartSitemaps-' . uniqid() . '/';
-        $this->filesystem->mkdir($tempDir);
+        $this->getFileSystem()->mkdir($tempDir);
         return $tempDir;
     }
 
     protected function cleanup($dir)
     {
-        $this->filesystem->remove($dir);
+        $this->getFileSystem()->remove($dir);
     }
 
     protected function moveFiles($tempDir, $targetDir)
@@ -96,7 +104,7 @@ class DumpCommand extends ContainerAwareCommand
             throw new \RuntimeException("Can't move sitemaps to $targetDir - directory is not writeable");
         }
 
-        $this->filesystem->mirror($tempDir, $targetDir, null, array('override' => true));
+        $this->getFileSystem()->mirror($tempDir, $targetDir, null, array('override' => true));
         $this->cleanup($tempDir);
     }
 

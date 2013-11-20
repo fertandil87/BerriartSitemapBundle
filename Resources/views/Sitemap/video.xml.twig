@@ -1,0 +1,16 @@
+<video:content_loc>{{ video.contentLoc|berriart_sitemap_absolutize }}</video:content_loc>
+{% if video.description %}
+    <video:description>{{ video.description }}</video:description>
+{% endif %}
+{% if video.duration %}
+    <video:duration>{{ video.duration }}</video:duration>
+{% endif %}
+{% if video.publicationDate %}
+    <video:publication_date>{{ video.publicationDate.format('c') }}</video:publication_date>
+{% endif %}
+{% if video.thumbnailLoc %}
+    <video:thumbnail_loc>{{ video.thumbnailLoc }}</video:thumbnail_loc>
+{% endif %}
+{% if video.title %}
+    <video:title>{{ video.title }}</video:title>
+{% endif %}

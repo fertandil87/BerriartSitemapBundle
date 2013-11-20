@@ -50,7 +50,8 @@ class PopulateCommand extends ContainerAwareCommand
         $platform = $em->getConnection()->getDatabasePlatform();
         $tables = array(
             $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.url.class'))->getTableName(),
-            $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.image_url.class'))->getTableName()
+            $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.image_url.class'))->getTableName(),
+            $em->getClassMetadata($this->getContainer()->getParameter('berriart_sitemap.entity.video.class'))->getTableName()
         );
 
         $em->getConnection()->executeUpdate("SET foreign_key_checks = 0;");

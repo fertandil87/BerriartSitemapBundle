@@ -21,8 +21,12 @@ Berriart\Bundle\SitemapBundle\Entity\Url:
         priority:
             type: float
             nullable: true
-
     oneToMany:
         images:
             targetEntity: Berriart\Bundle\SitemapBundle\Entity\ImageUrl
             mappedBy: url
+            cascade: ["persist", "merge"]
+        videos:
+            targetEntity: Berriart\Bundle\SitemapBundle\Entity\Video
+            mappedBy: url
+            cascade: ["persist", "merge"]

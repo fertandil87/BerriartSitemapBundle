@@ -8,8 +8,17 @@
 {% if url.priority %}
 <priority>{{ url.priority }}</priority>
 {% endif %}
-{% for image in url.images %}
-<image:image>
-    {% include "BerriartSitemapBundle:Sitemap:image.xml.twig" with { 'image': image } %}
-</image:image>
-{% endfor %}
+{% if url.images is defined %}
+  {% for image in url.images %}
+  <image:image>
+      {% include "BerriartSitemapBundle:Sitemap:image.xml.twig" with { 'image': image } %}
+  </image:image>
+  {% endfor %}
+{% endif %}
+{% if url.videos is defined %}
+  {% for video in url.videos %}
+  <video:video>
+      {% include "BerriartSitemapBundle:Sitemap:video.xml.twig" with { 'video': video } %}
+  </video:video>
+  {% endfor %}
+{% endif %}

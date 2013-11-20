@@ -62,11 +62,17 @@ class Url
     protected $images;
 
     /**
+     * @var array $videos
+     */
+    protected $videos;
+
+    /**
      * Constructor 
      */
     public function __construct()
     {
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->videos = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -177,5 +183,25 @@ class Url
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Add video
+     *
+     * @param \Berriart\Bundle\SitemapBundle\Entity\Video $video
+     */
+    public function addVideo(\Berriart\Bundle\SitemapBundle\Entity\Video $video)
+    {
+        $this->videos[] = $video;
+    }
+
+    /**
+     * Get videos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVideos()
+    {
+        return $this->videos;
     }
 }

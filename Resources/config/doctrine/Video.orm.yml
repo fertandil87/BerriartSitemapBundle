@@ -1,0 +1,38 @@
+Berriart\Bundle\SitemapBundle\Entity\Video:
+    type: entity
+    table: berriart_sitemap_video
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        content_loc:
+            type: string
+            length: 255
+            unique: true
+        description:
+            type: string
+            length: 255
+            nullable: false
+        duration:
+            type: integer
+            nullable: true
+        publication_date:
+            type: datetime
+            nullable: true
+        thumbnail_loc:
+            type: string
+            length: 255
+            nullable: false
+        title:
+            type: string
+            length: 255
+            nullable: false
+
+    manyToOne:
+        url:
+            targetEntity: Berriart\Bundle\SitemapBundle\Entity\Url
+            inversedBy: images
+            joinColumn:
+                name: url_id
+                referencedColumnName: id
