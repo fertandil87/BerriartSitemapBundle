@@ -14,22 +14,19 @@ namespace Berriart\Bundle\SitemapBundle\Repository;
  */
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping;
 use Berriart\Bundle\SitemapBundle\Entity\Url;
 use Berriart\Bundle\SitemapBundle\Repository\UrlRepositoryInterface;
-use Doctrine\ORM\Mapping;
 
 /**
  * UrlRepository
  */
 class UrlRepository extends EntityRepository implements UrlRepositoryInterface
 {
-    private $urlsToRemove = array();
-    
     public function add(Url $url)
     {
         $em = $this->getEntityManager();
         $em->persist($url);
-        $this->scheduleForCleanup($url);
     }
 
     public function findAllOnPage($page, $limit = self::LIMIT)
@@ -47,19 +44,13 @@ class UrlRepository extends EntityRepository implements UrlRepositoryInterface
 
     public function findOneByLoc($loc)
     {
-        $url = $this->findOneBy(array('loc' => $loc));
-        if (null !== $url) {
-            $this->scheduleForCleanup($url);
-        }
-        
-        return $url;
+        return $this->findOneBy(array('loc' => $loc));
     }
 
     public function remove(Url $url)
     {
         $em = $this->getEntityManager();
         $em->remove($url);
-        $this->scheduleForCleanup($url);
     }
 
     public function pages($limit = self::LIMIT)
@@ -71,23 +62,9 @@ class UrlRepository extends EntityRepository implements UrlRepositoryInterface
     {
         $em = $this->getEntityManager();
         $em->flush();
-        $this->cleanup();
+        $em->clear();
     }
 
-    private function scheduleForCleanup(Url $url)
-    {
-        $this->urlsToRemove[] = $url;
-    }
-
-    private function cleanup()
-    {
-        $em = $this->getEntityManager();
-        foreach ($this->urlsToRemove as $url) {
-            $em->detach($url);
-        }
-        $this->urlsToRemove = array();
-    }
-    
     private function countAll()
     {
         $em = $this->getEntityManager();
