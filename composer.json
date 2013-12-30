@@ -1,5 +1,5 @@
 {
-    "name": "berriart/sitemap-bundle",
+    "name": "fertandil87/sitemap-bundle",
     "description": "This bundle provides a way to create an xml sitemap using doctrine",
     "keywords": ["sitemap","command","seo"],
     "type": "symfony-bundle",
